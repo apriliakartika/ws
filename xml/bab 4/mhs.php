@@ -1,14 +1,17 @@
 <?php
 	header('Content-type: text/xml; charset-ISO-8859-1');
 	include "koneksi.php";
-	
-	$path = $_SERVER(PATH_INFO);
+	$path_params = array();
+$self = $_SERVER['PHP_SELF'];
+$extension = substr($self, strlen($self)-3);
+$path = ($extension=='php') ? NULL : $_SERVER['PATH_INFO'];
+	//$path = $_SERVER(PATH_INFO);
 	if ($path!=null) {
-		$path_params = spliti ("/", $path);
+		$path_params = explode ("/", $path);
 	}
 	
 	if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-		if ($path_params[1] != null){
+		if (isset($path_params[1]) && $path_params[1] != NULL ){
 			$query = "select
 			nim,
 			nama,
@@ -29,13 +32,19 @@
 		
 		echo "<data>";
 			while ($line = mysql_fetch_array($result, MYSQL_ASSOC)){
-				echo <"mahasiswa">;
-				foreach ($line as $key => $col_value){
+				 echo "<mahasiswa>";
+				foreach ($line as $key => $col_value) {
+      echo "<$key>$col_value</$key>";
+    }
+    echo "</mahasiswa>";
+	
+				}
 				echo "</data>";
 				
 				
 		mysql_free_result($result);
 	}
-	}
+	
 	mysql_close($link);
+	
 	?>
